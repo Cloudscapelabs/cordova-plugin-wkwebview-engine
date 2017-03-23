@@ -66,6 +66,9 @@
         }
 
         self.engineWebView = [[WKWebView alloc] initWithFrame:frame];
+        // add to keyWindow to ensure it is 'active'
+        [UIApplication.sharedApplication.keyWindow addSubview:self.engineWebView];
+        
         self.fileQueue = [[NSOperationQueue alloc] init];
 
         [GCDWebServer setLogLevel:kGCDWebServerLoggingLevel_Debug];
@@ -143,9 +146,11 @@
     configuration.userContentController = userContentController;
 
     // re-create WKWebView, since we need to update configuration
+    [self.engineWebView removeFromSuperview]
     WKWebView* wkWebView = [[WKWebView alloc] initWithFrame:self.engineWebView.frame configuration:configuration];
     wkWebView.UIDelegate = self.uiDelegate;
     self.engineWebView = wkWebView;
+    [UIApplication.sharedApplication.keyWindow addSubview:self.engineWebView];
 
     if (IsAtLeastiOSVersion(@"9.0") && [self.viewController isKindOfClass:[CDVViewController class]]) {
         wkWebView.customUserAgent = ((CDVViewController*) self.viewController).userAgent;

@@ -44,6 +44,7 @@
 @property (nonatomic, strong, readwrite) UIView* engineWebView;
 @property (nonatomic, strong, readwrite) id <WKUIDelegate> uiDelegate;
 @property (nonatomic, weak) id <WKScriptMessageHandler> weakScriptMessageHandler;
+@property (nonatomic, strong) NSMutableDictionary* webServerOptions;
 @property (nonatomic, strong) GCDWebServer *webServer;
 
 @end
@@ -67,8 +68,22 @@
         self.fileQueue = [[NSOperationQueue alloc] init];
 
         self.webServer = [[GCDWebServer alloc] init];
+      
         [self.webServer addGETHandlerForBasePath:@"/" directoryPath:@"/" indexFilename:nil cacheAge:3600 allowRangeRequests:YES];
-        [self.webServer startWithPort:8080 bonjourName:nil];
+     
+        self.webServerOptions = [NSMutableDictionary dictionary];
+        [self.webServerOptions setObject:[NSNumber numberWithBool:NO] 
+                                  forKey:GCDWebServerOption_AutomaticallySuspendInBackground];
+        [self.webServerOptions setObject:[NSNumber numberWithBool:YES]
+                                  forKey:GCDWebServerOption_BindToLocalhost];     
+     
+        int httpPort = 8080;
+        do {
+            [self.webServerOptions setObject:[NSNumber numberWithInteger:httpPort++]
+                                      forKey:GCDWebServerOption_Port];
+        } while(![self.webServer startWithOptions:self.webServerOptions error:&error]);
+     
+        //[self.webServer startWithPort:8080 bonjourName:nil];
     }
 
     return self;

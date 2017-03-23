@@ -67,6 +67,8 @@
         self.engineWebView = [[WKWebView alloc] initWithFrame:frame];
         self.fileQueue = [[NSOperationQueue alloc] init];
 
+        [GCDWebServer setLogLevel:kGCDWebServerLoggingLevel_Debug];
+     
         self.webServer = [[GCDWebServer alloc] init];
       
         [self.webServer addGETHandlerForBasePath:@"/" directoryPath:@"/" indexFilename:nil cacheAge:3600 allowRangeRequests:YES];

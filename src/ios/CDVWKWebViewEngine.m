@@ -23,6 +23,7 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <objc/message.h>
 #import "GCDWebServer.h"
+#import "GCDWebServerPrivate.h"
 
 #define CDV_BRIDGE_NAME @"cordova"
 #define CDV_IONIC_STOP_SCROLL @"stopScroll"

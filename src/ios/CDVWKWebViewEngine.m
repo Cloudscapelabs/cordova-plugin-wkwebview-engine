@@ -78,11 +78,18 @@
                                   forKey:GCDWebServerOption_BindToLocalhost];     
      
         int httpPort = 8080;
+        NSError *error = nil;
+     
         do {
             [self.webServerOptions setObject:[NSNumber numberWithInteger:httpPort++]
                                       forKey:GCDWebServerOption_Port];
         } while(![self.webServer startWithOptions:self.webServerOptions error:&error]);
      
+        if (error) {
+            NSLog(@"Error starting http daemon: %@", error);
+        } else {
+            NSLog(@"Started http daemon: %@ ", self.webServer.serverURL);
+        }     
         //[self.webServer startWithPort:8080 bonjourName:nil];
     }
 
